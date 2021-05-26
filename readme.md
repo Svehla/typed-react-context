@@ -1,13 +1,12 @@
+## Goal
 
-# React typed state management under 10 lines of code
+The goal of this tutorial is to write "strong" state management with 100% type inference from the javascript code.
 
 ## TLDR:
 
-[Final example of the state management is available on github](https://github.com/Svehla/typed-react-context)
+[Final example of the state management is available on github](https://github.com/Svehla/typed-react-context/blob/master/index.tsx)
 
 or you can find a fully working example at the end of this article.
-
-![Usage](Example screenshot)
 
 ## Historical background
 
@@ -34,21 +33,22 @@ A great feature of this pattern is that you don't re-render components that are 
 In pure vanilla React you can write your state management via context like this.
 
 ```javascript
-const MyC = React.createContext(null)
+import React, { useState, useContext } from 'react'
+const MyContext = React.createContext(null)
 
 const LogicStateContextProvider = (props) => {
   const [logicState, setLogicState] = useState(null)
 
   return (
-    <MyC.Provider value={{ logicState, setLogicState }}>
+    <MyContextontext.Provider value={{ logicState, setLogicState }}>
       {...props}
-    </MyC.Provider>
+    </MyContextontext.Provider>
   )
 }
 
 const Child = () => {
-  const logic = useContext(MyC)
-  return (/*...*/)
+  const logic = useContext(MyContext)
+  return <div />
 }
 
 const App = () => (
@@ -72,7 +72,7 @@ type DefinedInterfaceForMyCContext = {
   /* redundant unwanted line of static type */
 }
 
-const MyC = React.createContext<BoringToTypesTheseCha>(
+const MyContext = React.createContext<BoringToTypesTheseCha>(
   null as any /* ts hack to omit default values */
 )
 
@@ -80,9 +80,9 @@ const LogicStateContextProvider = (props) => {
   const [logicState, setLogicState] = useState(null as null | string)
 
   return (
-    <MyC.Provider value={{ logicState, setLogicState }}>
+    <MyContext.Provider value={{ logicState, setLogicState }}>
       {...props}
-    </MyC.Provider>
+    </MyContext.Provider>
   )
 }
 
@@ -106,7 +106,7 @@ const useLogicState = () => {
   }
 }
 
-const MyC = React.createContext<
+const MyContext = React.createContext<
   /* some Typescript generic magic */
   ReturnType<typeof useLogicState>
 >(
@@ -117,15 +117,15 @@ const LogicStateContextProvider = (props) => {
   const value = useLogicState()
 
   return (
-    <MyC.Provider value={value}>
+    <MyContext.Provider value={value}>
       {...props}
-    </MyC.Provider>
+    </MyContext.Provider>
   )
 }
 
 const Child = () => {
-  const logic = useContext(MyC)
-  return (/*...*/)
+  const logic = useContext(MyContext)
+  return <div />
 }
 
 const App = () => (
@@ -182,7 +182,20 @@ we're ready to use use it in the next example.
 
 
 ```typescript
-import { genericHookContextBuilder } from './genericHookContextBuilder'
+import React, { useState, useContext } from 'react';
+
+export const genericHookContextBuilder = <T, P>(hook: () => T) => {
+  const Context = React.createContext<T>(undefined as never)
+
+  return {
+    Context,
+    ContextProvider: (props: Props & P) => {
+      const value = hook()
+
+      return <Context.Provider value={value}>{props.children}</Context.Provider>
+    },
+  }
+}
 
 const useLogicState = () => {
   const [logicState, setLogicState] = useState(null as null | string)
@@ -199,8 +212,8 @@ export const {
 } = genericHookContextBuilder(useLogicState)
 
 const Child = () => {
-  const logic = useContext(MyC)
-  return (/*...*/)
+  const logic = useContext(LogicStateContext)
+  return <div />
 }
 
 const App = () => (
@@ -211,6 +224,12 @@ const App = () => (
 
 ```
 
+![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/amxgaqcla1vr01lwmbih.png)
+
+![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/g2tx3v6kt9zqghpmyfk6.png)
+
 As you can see, we have written a small wrapper around native React context default verbose API.
 The wrapper enhanced it with out-of-the-box Typescript type inference, which enabled us not to duplicate code and to save a lot of extra lines.
 
+
+I hope that you enjoyed this article the same as me and learned something new. If yes don't forget to like this article
