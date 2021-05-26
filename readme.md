@@ -138,9 +138,11 @@ const App = () => (
 As you can see, decoupling logic into a custom hook enable us to infer the data type by `ReturnType<typeof customHook>`.
 
 ***
+
 If you don't fully understand this line of TS code `ReturnType<typeof useLogicState>` you can check my other Typescript tutorials.
 - https://dev.to/svehla/typescript-inferring-stop-writing-tests-avoid-runtime-errors-pt1-33h7
 - https://dev.to/svehla/typescript-generics-stop-writing-tests-avoid-runtime-errors-pt2-2k62
+
 ***
 
 I also don't like the fact that there is a lot of redundant characters which you have to have in the code
