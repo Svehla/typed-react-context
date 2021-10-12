@@ -186,6 +186,11 @@ we're ready to use use it in the next example.
 ```typescript
 import React, { useState, useContext } from 'react';
 
+
+type Props = {
+  children: React.ReactNode
+}
+
 export const genericHookContextBuilder = <T, P>(hook: () => T) => {
   const Context = React.createContext<T>(undefined as never)
 
