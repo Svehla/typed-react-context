@@ -231,9 +231,9 @@ const App = () => (
 
 ```
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/amxgaqcla1vr01lwmbih.png)
+![Alt Text](https://raw.githubusercontent.com/Svehla/typed-react-context/master/imgs/preview-1.png)
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/g2tx3v6kt9zqghpmyfk6.png)
+![Alt Text](https://raw.githubusercontent.com/Svehla/typed-react-context/master/imgs/preview-2.png)
 
 As you can see, we have written a small wrapper around native React context default verbose API.
 The wrapper enhanced it with out-of-the-box Typescript type inference, which enabled us not to duplicate code and to save a lot of extra lines.
